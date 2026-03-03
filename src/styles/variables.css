@@ -1,0 +1,28 @@
+:root {
+  --header-bg: rgba(227, 6, 19, 0.6); /* Полупрозрачный красный МТС */
+  --header-blur: blur(15px);
+  --glass-border-light: rgba(255, 255, 255, 0.2);
+
+  --mts-red: #E30613;
+  --mts-white: #FFFFFF;
+  --mts-black: #1D1D1B;
+  
+  /* Glassmorphism White Accent */
+  --glass-white: rgba(255, 255, 255, 0.15);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-blur: blur(20px);
+  
+  /* Эффекты */
+  --transition-smooth: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

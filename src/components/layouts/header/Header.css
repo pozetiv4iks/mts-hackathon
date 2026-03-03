@@ -1,0 +1,97 @@
+.glass-header {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1200px;
+  height: 70px;
+  background: var(--header-bg);
+  backdrop-filter: var(--header-blur);
+  -webkit-backdrop-filter: var(--header-blur);
+  border: 1px solid var(--glass-border-light);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+  transition: all 0.4s ease;
+}
+
+.glass-header.scrolled {
+  top: 0;
+  width: 100%;
+  border-radius: 0;
+  background: rgba(227, 6, 19, 0.9);
+}
+
+.header-container {
+  width: 100%;
+  padding: 0 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mts-square {
+  width: 30px;
+  height: 30px;
+  background: white;
+  border-radius: 6px; /* Имитация яйца/логотипа */
+}
+
+.logo-text {
+  color: white;
+  font-size: 20px;
+  letter-spacing: 0.5px;
+}
+
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  opacity: 0.8;
+  transition: 0.3s;
+}
+
+.nav-link:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.glass-auth-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid white;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.glass-auth-btn:hover {
+  background: white;
+  color: var(--mts-red);
+}
+
+/* Скрываем десктоп на мобилках */
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+  .glass-header {
+    width: 95%;
+    top: 10px;
+  }
+}
