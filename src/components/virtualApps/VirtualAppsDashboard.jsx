@@ -1,187 +1,174 @@
-// src/components/virtualApps/VirtualAppsDashboard.jsx
-import React, { useState, useMemo } from "react";
-import VirtualAppCard from "./VirtualAppCard";
-import VirtualAppFilters from "./VirtualAppFilters";
-import "./VirtualApps.css";
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import * as api from '../../api/api';
+import VMList from './VMList';
+import VMForm from './VMForm';
+import TenantSelector from './TenantSelector';
+import GlassCard from '../UI/GlassCard';
+import LoadingSpinner from '../UI/LoadingSpinner';
 
-const MOCK_APPS = [
-  {
-    id: "va-1",
-    name: "CRM виртуальный стенд",
-    env: "prod",
-    status: "running",
-    owner: "Digital Core",
-    region: "Москва",
-    lastDeployed: "2026-03-01 12:34",
-    cpu: 62,
-    memory: 78,
-  },
-  {
-    id: "va-2",
-    name: "Документооборот",
-    env: "stage",
-    status: "stopped",
-    owner: "Backoffice",
-    region: "СПб",
-    lastDeployed: "2026-02-28 09:12",
-    cpu: 0,
-    memory: 0,
-  },
-  {
-    id: "va-3",
-    name: "Аналитика трафика",
-    env: "dev",
-    status: "degraded",
-    owner: "Big Data",
-    region: "Казань",
-    lastDeployed: "2026-03-03 18:10",
-    cpu: 88,
-    memory: 91,
-  },
-];
+function VirtualAppsDashboard() {
+  const { token, user } = useAuth();
+  const [vms, setVms] = useState([]);
+  const [tenants, setTenants] = useState([]);
+  const [selectedTenant, setSelectedTenant] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [error, setError] = useState(null);
 
-const VirtualAppsDashboard = () => {
-  const [filters, setFilters] = useState({
-    search: "",
-    status: "all",
-    env: "all",
-  });
-  const [selectedId, setSelectedId] = useState(null);
-
-  const filteredApps = useMemo(() => {
-    return MOCK_APPS.filter((app) => {
-      const matchesSearch =
-        !filters.search ||
-        app.name.toLowerCase().includes(filters.search.toLowerCase()) ||
-        app.id.toLowerCase().includes(filters.search.toLowerCase());
-
-      const matchesStatus =
-        filters.status === "all" || app.status === filters.status;
-
-      const matchesEnv =
-        filters.env === "all" || app.env === filters.env;
-
-      return matchesSearch && matchesStatus && matchesEnv;
-    });
-  }, [filters]);
-
-  const selectedApp =
-    filteredApps.find((a) => a.id === selectedId) ||
-    filteredApps[0] ||
-    null;
-
-  const handleAction = (action, app) => {
-    // TODO: сюда потом воткнёшь реальные API вызовы
-    console.log(`Action: ${action} on`, app);
+  const fetchVMs = async (tenantOverride = null) => {
+    if (!token) return;
+    try {
+      const params = tenantOverride
+        ? { tenant_id: tenantOverride.tenants_tenant_id }
+        : (selectedTenant ? { tenant_id: selectedTenant.tenants_tenant_id } : {});
+      const data = await api.getVirtualMachines(params, token);
+      setVms(data);
+    } catch (err) {
+      setError(err.message);
+      setVms([]);
+    }
   };
 
+  // Загрузка тенантов и начальная загрузка ВМ
+  useEffect(() => {
+    const loadData = async () => {
+      if (!token || !user) return;
+
+      try {
+        const tenantIds = await api.getUserTenants(user.users_user_id, token);
+        if (tenantIds.length > 0) {
+          const tenantDetails = await Promise.all(
+            tenantIds.map(id => api.getTenant(id, token))
+          );
+          setTenants(tenantDetails);
+          setSelectedTenant(tenantDetails[0]);
+        }
+        // ВМ подгрузим в отдельном эффекте после установки selectedTenant
+      } catch (err) {
+        console.error('Ошибка загрузки:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, [token, user]);
+
+  // Загрузка списка ВМ при появлении токена/тенанта
+  useEffect(() => {
+    if (!token || loading) return;
+    fetchVMs(selectedTenant || undefined);
+  }, [token, loading, selectedTenant]);
+
+  const handleCreateVM = async (vmData) => {
+    if (!token || !user) return;
+    if (!selectedTenant?.tenants_tenant_id) {
+      setError('Выберите тенант для создания ВМ.');
+      return;
+    }
+
+    setError(null);
+    const payload = {
+      name: vmData.name || 'Virtual Machine',
+      cpu: Number(vmData.cpu),
+      ram: Number(vmData.ram),
+      disk: Number(vmData.disk),
+      status: vmData.status || 'STOPPED',
+      tenant_id: selectedTenant.tenants_tenant_id,
+      created_by: user.users_user_id
+    };
+
+    try {
+      await api.createVirtualMachine(payload, token);
+      await fetchVMs(selectedTenant);
+      setShowCreateForm(false);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleDeleteVM = async (vmId) => {
+    if (!token) return;
+    if (window.confirm('Удалить эту виртуальную машину?')) {
+      await api.deleteVirtualMachine(vmId, token);
+      await fetchVMs();
+    }
+  };
+
+  const handleStartStop = async (vmId, newStatus) => {
+    if (!token) return;
+    try {
+      await api.updateVirtualMachine(vmId, { status: newStatus }, token);
+      await fetchVMs(selectedTenant);
+    } catch (err) {
+      console.error('Ошибка смены статуса ВМ:', err);
+    }
+  };
+
+  if (loading) {
+    return <LoadingSpinner fullScreen />;
+  }
+
   return (
-    <section className="va-layout">
-      <header className="va-header">
-        <div>
-          <h2 className="va-title">Виртуальные приложения</h2>
-          <p className="va-subtitle">
-            Управляйте виртуальными стендами МТС Digital в едином окне
-          </p>
-        </div>
-        <div className="va-header-badge">
-          {MOCK_APPS.length} приложений
-        </div>
-      </header>
-
-      <VirtualAppFilters filters={filters} onChange={setFilters} />
-
-      <div className="va-main">
-        <div className="va-grid">
-          {filteredApps.map((app) => (
-            <VirtualAppCard
-              key={app.id}
-              app={app}
-              active={selectedApp && selectedApp.id === app.id}
-              onSelect={() => setSelectedId(app.id)}
-              onAction={handleAction}
-            />
-          ))}
-          {filteredApps.length === 0 && (
-            <div className="va-empty glass-card">
-              <p>По текущим фильтрам приложений не найдено.</p>
-            </div>
-          )}
+    <div className="dashboard">
+      <section className="dashboard-toolbar">
+        <div className="dashboard-header">
+          <div>
+            <h2 className="dashboard-section-title">Виртуальные машины</h2>
+            <p className="dashboard-section-desc">Создавайте ВМ и управляйте их состоянием</p>
+          </div>
+          <button
+            type="button"
+            className="mts-btn primary"
+            onClick={() => { setShowCreateForm(!showCreateForm); setError(null); }}
+          >
+            {showCreateForm ? 'Отмена' : '+ Создать ВМ'}
+          </button>
         </div>
 
-        {selectedApp && (
-          <aside className="va-details glass-card">
-            <h3 className="va-details-title">
-              {selectedApp.name}
-            </h3>
-            <p className="va-details-id">{selectedApp.id}</p>
-
-            <div className="va-details-row">
-              <span>Окружение</span>
-              <span className={`va-pill va-pill-${selectedApp.env}`}>
-                {selectedApp.env}
-              </span>
-            </div>
-
-            <div className="va-details-row">
-              <span>Статус</span>
-              <span
-                className={`va-status-pill va-status-${selectedApp.status}`}
-              >
-                {selectedApp.status === "running" && "Работает"}
-                {selectedApp.status === "stopped" && "Остановлено"}
-                {selectedApp.status === "degraded" && "Проблемы"}
-              </span>
-            </div>
-
-            <div className="va-details-row">
-              <span>Ответственный</span>
-              <span>{selectedApp.owner}</span>
-            </div>
-
-            <div className="va-details-row">
-              <span>Регион</span>
-              <span>{selectedApp.region}</span>
-            </div>
-
-            <div className="va-metrics">
-              <div className="va-metric">
-                <div className="va-metric-label">
-                  CPU
-                  <span>{selectedApp.cpu}%</span>
-                </div>
-                <div className="va-metric-bar">
-                  <div
-                    className="va-metric-bar-fill"
-                    style={{ width: `${selectedApp.cpu}%` }}
-                  />
-                </div>
-              </div>
-              <div className="va-metric">
-                <div className="va-metric-label">
-                  RAM
-                  <span>{selectedApp.memory}%</span>
-                </div>
-                <div className="va-metric-bar">
-                  <div
-                    className="va-metric-bar-fill va-metric-ram"
-                    style={{ width: `${selectedApp.memory}%` }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <button
-              className="mts-btn va-details-btn"
-              onClick={() => handleAction("open-details", selectedApp)}
-            >
-              Открыть в консоли
-            </button>
-          </aside>
+        {error && (
+          <div className="error-message" role="alert" onClick={() => setError(null)}>
+            {error}
+          </div>
         )}
-      </div>
-    </section>
+
+        {tenants.length > 1 && (
+          <TenantSelector
+            tenants={tenants}
+            selected={selectedTenant}
+            onSelect={setSelectedTenant}
+          />
+        )}
+
+        {tenants.length === 0 && !loading && (
+          <div className="empty-block">
+            <p>Нет доступных тенантов. Обратитесь к администратору для подключения.</p>
+          </div>
+        )}
+      </section>
+
+      {showCreateForm && (
+        <section className="dashboard-form-section">
+          <GlassCard className="glass-card-form">
+            <VMForm
+              onSubmit={handleCreateVM}
+              onCancel={() => setShowCreateForm(false)}
+              defaultTenant={selectedTenant}
+            />
+          </GlassCard>
+        </section>
+      )}
+
+      <section className="dashboard-list-section" aria-label="Список виртуальных машин">
+        <VMList
+          vms={vms}
+          onDelete={handleDeleteVM}
+          onRefresh={fetchVMs}
+          onStartStop={handleStartStop}
+        />
+      </section>
+    </div>
   );
-};
+}
 
 export default VirtualAppsDashboard;

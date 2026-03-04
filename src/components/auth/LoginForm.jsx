@@ -1,99 +1,72 @@
-// src/components/auth/LoginForm.jsx
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
-const LoginForm = () => {
-  const [form, setForm] = useState({
-    login: "",
-    password: "",
-    remember: true,
-  });
+function LoginForm() {
+  const [formData, setFormData] = useState({ username: '', password: '' });
+  const [submitting, setSubmitting] = useState(false);
+  const { login, error: authError } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/dashboard';
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: сюда подключите реальный запрос авторизации
-    console.log("Вход:", form);
+    setSubmitting(true);
+    
+    const result = await login(formData.username, formData.password);
+    
+    if (result.success) {
+      navigate(from, { replace: true });
+    }
+    setSubmitting(false);
   };
-
-  const isDisabled = !form.login || !form.password;
 
   return (
-    <div className="glass-card auth-card">
-      <h2 className="auth-title">Войти</h2>
-      <p className="auth-subtitle">
-        Авторизуйтесь, чтобы продолжить работу в МТС Digital
+    <form onSubmit={handleSubmit} className="auth-form">
+      {authError && <div className="error-message">{authError}</div>}
+      
+      <div className="auth-field">
+        <label htmlFor="username">Имя пользователя</label>
+        <input
+          id="username"
+          name="username"
+          type="text"
+          value={formData.username}
+          onChange={handleChange}
+          required
+          disabled={submitting}
+          placeholder="Введите username"
+        />
+      </div>
+
+      <div className="auth-field">
+        <label htmlFor="password">Пароль</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+          disabled={submitting}
+          placeholder="••••••••"
+        />
+      </div>
+
+      <button type="submit" className="mts-btn primary" disabled={submitting}>
+        {submitting ? 'Вход...' : 'Войти'}
+      </button>
+
+      <p className="auth-helper">
+        Нет аккаунта? <Link to="/register" className="link-like">Зарегистрироваться</Link>
       </p>
-
-      <form className="auth-form" onSubmit={handleSubmit}>
-        <div className="auth-field">
-          <label htmlFor="login">Телефон или почта</label>
-          <input
-            id="login"
-            name="login"
-            type="text"
-            placeholder="+7 900 000‑00‑00 или email"
-            value={form.login}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="auth-field">
-          <label htmlFor="password">Пароль</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            placeholder="Введите пароль"
-            value={form.password}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="auth-row">
-          <div className="auth-checkbox">
-            <label>
-              <input
-                type="checkbox"
-                name="remember"
-                checked={form.remember}
-                onChange={handleChange}
-              />
-              <span>Запомнить меня</span>
-            </label>
-          </div>
-          <button
-            type="button"
-            className="link-like auth-forgot"
-            onClick={() => console.log("Нажали «Забыли пароль?»")}
-          >
-            Забыли пароль?
-          </button>
-        </div>
-
-        <button
-          type="submit"
-          className="mts-btn"
-          disabled={isDisabled}
-        >
-          Войти
-        </button>
-
-        <p className="auth-helper">
-          Нет аккаунта?{" "}
-          <button type="button" className="link-like">
-            Зарегистрироваться
-          </button>
-        </p>
-      </form>
-    </div>
+    </form>
   );
-};
+}
 
 export default LoginForm;

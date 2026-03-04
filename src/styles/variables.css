@@ -1,19 +1,37 @@
 :root {
-  --header-bg: rgba(227, 6, 19, 0.6); /* Полупрозрачный красный МТС */
+  --header-bg: rgba(227, 6, 19, 0.6);
   --header-blur: blur(15px);
   --glass-border-light: rgba(255, 255, 255, 0.2);
 
   --mts-red: #E30613;
   --mts-white: #FFFFFF;
   --mts-black: #1D1D1B;
-  
-  /* Glassmorphism White Accent */
-  --glass-white: rgba(255, 255, 255, 0.15);
-  --glass-border: rgba(255, 255, 255, 0.3);
+  --mts-red-soft: rgba(227, 6, 19, 0.08);
+  --mts-red-border: rgba(227, 6, 19, 0.25);
+  --mts-red-focus: rgba(227, 6, 19, 0.35);
+
+  --header-height: 90px;
+  --mobile-nav-height: 100px;
+  --glass-bg: rgba(252, 134, 134, 0.2);
+  --glass-bg-strong: rgba(252, 134, 134, 0.35);
+  --glass-input: rgba(255, 255, 255, 0.95);
+  --glass-input-border: rgba(227, 6, 19, 0.2);
+  --border-color: rgba(227, 6, 19, 0.25);
+  --text-primary: #2d1516;
+  --text-secondary: #5c2d2f;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --accent-red: #E30613;
+  --accent-red-dark: #b8050f;
+  --transition: all 0.25s ease;
+  --shadow-soft: 0 4px 20px rgba(227, 6, 19, 0.08);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.08);
+
+  --glass-white: rgba(255, 255, 255, 0.2);
+  --glass-border: rgba(255, 255, 255, 0.35);
   --glass-blur: blur(20px);
-  
-  /* Эффекты */
-  --transition-smooth: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  --transition-smooth: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 @keyframes fadeInUp {
@@ -27,18 +45,27 @@
   }
 }
 
-/* Стеклянная карточка регистрации в стиле проекта */
+/* Стеклянная карточка регистрации / общие формы */
 .auth-card {
-  max-width: 480px;
-  margin: 40px auto;
-  padding: 32px 28px;
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 36px 32px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+.auth-card h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--mts-red);
+  margin: 0 0 4px;
+  letter-spacing: -0.02em;
 }
 
 .auth-title {
-  font-size: 28px;
+  font-size: 1.5rem;
   font-weight: 800;
   color: var(--mts-red);
   margin: 0;
@@ -46,14 +73,15 @@
 
 .auth-subtitle {
   margin: 0;
-  font-size: 14px;
-  opacity: 0.9;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  opacity: 0.95;
 }
 
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 
 .auth-field {
@@ -63,25 +91,33 @@
 }
 
 .auth-field label {
-  font-size: 13px;
-  font-weight: 500;
-  opacity: 0.8;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  opacity: 0.9;
 }
 
 .auth-field input {
-  border-radius: 14px;
-  border: 1px solid rgba(227, 6, 19, 0.25);
-  padding: 10px 12px;
-  font-size: 14px;
-  background: rgba(255, 255, 255, 0.9);
+  height: 44px;
+  padding: 0 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--mts-red-border);
+  font-size: 0.9375rem;
+  background: var(--glass-input);
+  color: var(--text-primary);
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.auth-field input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
 }
 
 .auth-field input:focus {
   border-color: var(--mts-red);
-  box-shadow: 0 0 0 1px rgba(227, 6, 19, 0.3);
-  background: #ffffff;
+  box-shadow: 0 0 0 2px var(--mts-red-focus);
+  background: var(--mts-white);
 }
 
 .auth-field-inline {
@@ -91,26 +127,28 @@
 }
 
 .auth-checkbox {
-  font-size: 12px;
-  line-height: 1.4;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
 }
 
 .auth-checkbox label {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
+  gap: 10px;
   cursor: pointer;
 }
 
 .auth-checkbox input[type="checkbox"] {
-  margin-top: 2px;
+  margin-top: 3px;
+  accent-color: var(--mts-red);
 }
 
 .auth-helper {
-  margin: 8px 0 0;
-  font-size: 13px;
+  margin: 4px 0 0;
+  font-size: 0.875rem;
   text-align: center;
-  opacity: 0.8;
+  color: var(--text-secondary);
 }
 
 .link-like {
@@ -119,32 +157,51 @@
   padding: 0;
   margin: 0;
   color: var(--mts-red);
+  font-weight: 600;
   font: inherit;
   cursor: pointer;
   text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
-/* Адаптив */
-@media (max-width: 480px) {
-  .auth-card {
-    margin: 20px auto;
-    padding: 24px 18px;
-  }
-
-  .auth-field-inline {
-    grid-template-columns: 1fr;
-  }
+.link-like:hover {
+  color: var(--accent-red-dark);
 }
 
-/* рядом с остальными auth-стилями, где уже лежит RegisterForm */
+.auth-switch {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.auth-switch a {
+  color: var(--mts-red);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
+}
+
 .auth-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  font-size: 12px;
+  font-size: 0.8125rem;
 }
 
 .auth-forgot {
-  font-size: 12px;
+  font-size: 0.8125rem;
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 28px 20px;
+  }
+
+  .auth-field-inline {
+    grid-template-columns: 1fr;
+  }
 }

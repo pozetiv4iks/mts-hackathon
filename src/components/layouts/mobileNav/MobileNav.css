@@ -1,20 +1,21 @@
 .mobile-bottom-nav {
-  display: none; /* По умолчанию скрыто */
+  display: none;
   position: fixed;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   width: 90%;
-  height: 65px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  max-width: 400px;
+  height: 64px;
+  background: rgba(227, 6, 19, 0.85);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 25px;
+  border-radius: 24px;
   z-index: 1001;
   justify-content: space-around;
   align-items: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(227, 6, 19, 0.25);
 }
 
 .mobile-nav-item {
@@ -24,6 +25,8 @@
   color: white;
   opacity: 0.6;
   font-size: 12px;
+  text-decoration: none;
+  transition: opacity 0.2s;
 }
 
 .mobile-nav-item.active {
@@ -33,6 +36,10 @@
 .mobile-nav-item .icon {
   font-size: 20px;
   margin-bottom: 4px;
+}
+
+.mobile-nav-item .label {
+  font-weight: 500;
 }
 
 @media (max-width: 768px) {

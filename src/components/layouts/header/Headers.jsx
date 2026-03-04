@@ -1,31 +1,45 @@
 // src/components/Layout/Header.jsx
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../context/AuthContext';
 import './Header.css';
 
 const Header = () => {
-  const [scrolled, setScrolled] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
 
-  // Эффект изменения прозрачности при скролле
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
+  const isAdmin = user?.users_user_role === 'admin';
 
   return (
-    <header className={`glass-header ${scrolled ? 'scrolled' : ''}`}>
+    <header className="glass-header">
       <div className="header-container">
-        <div className="logo-section">
-          <div className="mts-square"></div>
+        <Link to="/" className="logo-section">
           <span className="logo-text">MTS <b>Digital</b></span>
-        </div>
+        </Link>
 
-        {/* Десктопное меню */}
         <nav className="desktop-nav">
-          <a href="#solutions" className="nav-link">Решения</a>
-          <a href="#tariffs" className="nav-link">Тарифы</a>
-          <a href="#about" className="nav-link">О нас</a>
-          <button className="glass-auth-btn">Войти</button>
+          <Link to="/" className="nav-link">Главная</Link>
+          {isAuthenticated && (
+            <>
+              <Link to="/dashboard" className="nav-link">Личный кабинет</Link>
+              {isAdmin && (
+                <Link to="/admin" className="nav-link nav-link-admin">Панель администратора</Link>
+              )}
+            </>
+          )}
+          {isAuthenticated ? (
+            <span className="header-user">
+              <span className="header-username">{user?.users_username}</span>
+              <button type="button" className="glass-auth-btn" onClick={handleLogout}>Выйти</button>
+            </span>
+          ) : (
+            <Link to="/login" className="glass-auth-btn">Войти</Link>
+          )}
         </nav>
       </div>
     </header>
