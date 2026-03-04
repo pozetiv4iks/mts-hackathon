@@ -2,16 +2,20 @@ import React from "react";
 import Header from "./components/layouts/header/Headers";
 import MobileNav from "./components/layouts/mobileNav/MobileNav";
 import GlassCard from "./components/UI/GlassCard";
-
+import LoginForm from "./components/auth/LoginForm";
 // Стили подгружаются из отдельных файлов, которые мы создали ранее
 import "./styles/variables.css";
 import "./styles/global.css";
+import RegisterForm from "./components/auth/RegisterForm";
+import VirtualAppsDashboard from "./components/virtualApps/VirtualAppsDashboard";
 
 function App() {
   return (
+    <>
+      <Header />
+
     <div className="mts-layout">
       {/* Стеклянный хедер (Бело-красный) */}
-      <Header />
 
       <main className="content-container">
         {/* Секция Hero */}
@@ -54,110 +58,15 @@ function App() {
       <MobileNav />
 
       <style jsx>{`
-        .mts-layout {
-          min-height: 100vh;
-          background-color: var(--mts-red);
-          /* Градиент добавляет глубины для эффекта стекла */
-          background-image: 
-            radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.15) 0%, transparent 35%),
-            radial-gradient(circle at 100% 100%, rgba(0, 0, 0, 0.1) 0%, transparent 35%);
-          padding-bottom: 100px; /* Отступ под мобильное меню */
-        }
 
-        .content-container {
-          padding: 120px 20px 40px; /* Отступ сверху, чтобы не заходило под хедер */
-          max-width: 1200px;
-          margin: 0 auto;
-        }
-
-        .hero {
-          text-align: center;
-          margin-bottom: 60px;
-          color: white;
-        }
-
-        .hero h1 {
-          font-size: clamp(2.5rem, 8vw, 4.5rem);
-          font-weight: 900;
-          margin: 0;
-          line-height: 1.1;
-        }
-
-        .highlight {
-          color: rgba(255, 255, 255, 0.5);
-          -webkit-text-stroke: 1px white;
-        }
-
-        .subtitle {
-          font-size: 1.2rem;
-          opacity: 0.9;
-          margin-top: 20px;
-        }
-
-        .grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: 25px;
-        }
-
-        /* Декоративные элементы внутри карточек */
-        .card-badge {
-          background: white;
-          color: var(--mts-red);
-          display: inline-block;
-          padding: 4px 12px;
-          border-radius: 8px;
-          font-size: 12px;
-          font-weight: bold;
-          margin-bottom: 15px;
-        }
-
-        .price-tag {
-          font-size: 24px;
-          font-weight: bold;
-          margin: 20px 0;
-        }
-
-        .card-icon {
-          font-size: 40px;
-          margin-bottom: 20px;
-        }
-
-        /* Кнопки */
-        .mts-btn {
-          width: 100%;
-          background: white;
-          color: var(--mts-red);
-          border: none;
-          padding: 14px;
-          border-radius: 16px;
-          font-weight: bold;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-
-        .mts-btn:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .mts-btn.secondary {
-          background: rgba(255, 255, 255, 0.1);
-          color: white;
-          border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .mts-btn.secondary:hover {
-          background: rgba(255, 255, 255, 0.2);
-        }
-
-        @media (max-width: 768px) {
-          .content-container {
-            padding-top: 100px;
-          }
-        }
       `}</style>
+      <RegisterForm />
+      <LoginForm />
+      <VirtualAppsDashboard />
     </div>
+    
+    </>
+
   );
 }
 

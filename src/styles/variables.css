@@ -26,3 +26,125 @@
     transform: translateY(0);
   }
 }
+
+/* Стеклянная карточка регистрации в стиле проекта */
+.auth-card {
+  max-width: 480px;
+  margin: 40px auto;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.auth-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--mts-red);
+  margin: 0;
+}
+
+.auth-subtitle {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.auth-field label {
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.auth-field input {
+  border-radius: 14px;
+  border: 1px solid rgba(227, 6, 19, 0.25);
+  padding: 10px 12px;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.9);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.auth-field input:focus {
+  border-color: var(--mts-red);
+  box-shadow: 0 0 0 1px rgba(227, 6, 19, 0.3);
+  background: #ffffff;
+}
+
+.auth-field-inline {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.auth-checkbox {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.auth-checkbox label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.auth-checkbox input[type="checkbox"] {
+  margin-top: 2px;
+}
+
+.auth-helper {
+  margin: 8px 0 0;
+  font-size: 13px;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.link-like {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: var(--mts-red);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Адаптив */
+@media (max-width: 480px) {
+  .auth-card {
+    margin: 20px auto;
+    padding: 24px 18px;
+  }
+
+  .auth-field-inline {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* рядом с остальными auth-стилями, где уже лежит RegisterForm */
+.auth-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+}
+
+.auth-forgot {
+  font-size: 12px;
+}

@@ -1,11 +1,11 @@
 .glass-card {
-  background: var(--glass-white);
+  background: #fc86867b;
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   border-radius: 32px; /* Округлые формы в тренде */
   padding: 30px;
-  color: var(--mts-white);
+  color: #461a1a;
   transition: var(--transition-smooth);
   animation: fadeInUp 0.8s ease backwards;
   position: relative;
@@ -14,9 +14,9 @@
 
 .glass-card:hover {
   transform: translateY(-10px);
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(241, 144, 144, 0.25);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
+  border-color: rgba(247, 2, 2, 0.5);
 }
 
 /* Эффект блика при наведении */

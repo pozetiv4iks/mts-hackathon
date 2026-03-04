@@ -1,0 +1,421 @@
+/* src/components/virtualApps/VirtualApps.css */
+
+.va-layout {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .va-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  
+  .va-title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--mts-red);
+  }
+  
+  .va-subtitle {
+    margin: 4px 0 0;
+    font-size: 13px;
+    opacity: 0.85;
+  }
+  
+  .va-header-badge {
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(227, 6, 19, 0.08);
+    color: var(--mts-red);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  
+  /* Фильтры */
+  
+.va-filters {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 20px;
+    position: relative; 
+    z-index: 10;
+    overflow: visible; /* позволяем меню выходить за границы карточки */
+  }
+  
+  .va-filters-left,
+  .va-filters-right {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+.va-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 160px;
+    position: relative; /* для абсолютного меню выпадашки */
+  }
+  
+  .va-field label {
+    font-size: 12px;
+    opacity: 0.8;
+  }
+  
+  .va-field input,
+  .va-field select {
+    border-radius: 14px;
+    border: 1px solid rgba(227, 6, 19, 0.25);
+    padding: 8px 12px;
+    font-size: 13px;
+    background: rgba(255, 255, 255, 0.9);
+    outline: none;
+  }
+  
+  .va-field input:focus,
+  .va-field select:focus {
+    border-color: var(--mts-red);
+  }
+  
+  /* Основная область: список + детали */
+  
+  .va-main {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .va-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+  }
+  
+  .va-empty {
+    padding: 24px;
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  /* Карточка приложения */
+  
+  .va-card {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .va-card-active {
+    box-shadow: 0 0 0 1px rgba(227, 6, 19, 0.4);
+    transform: translateY(-4px);
+  }
+  
+  .va-card-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  
+  .va-card-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  
+  .va-card-id {
+    margin: 2px 0 0;
+    font-size: 11px;
+    opacity: 0.7;
+  }
+  
+  .va-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    font-size: 11px;
+  }
+  
+  .va-owner {
+    margin-left: auto;
+    font-weight: 500;
+  }
+  
+  .va-pill {
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  
+  .va-pill-prod {
+    background: rgba(227, 6, 19, 0.16);
+    color: var(--mts-red);
+  }
+  
+  .va-pill-stage {
+    background: rgba(255, 193, 7, 0.16);
+    color: #b98000;
+  }
+  
+  .va-pill-dev {
+    background: rgba(76, 175, 80, 0.16);
+    color: #2e7d32;
+  }
+  
+  .va-pill-light {
+    background: rgba(255, 255, 255, 0.7);
+    color: #444;
+  }
+  
+  /* Статусы */
+  
+  .va-status-pill {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  
+  .va-status-running {
+    background: rgba(76, 175, 80, 0.16);
+    color: #2e7d32;
+  }
+  
+  .va-status-stopped {
+    background: rgba(158, 158, 158, 0.18);
+    color: #555;
+  }
+  
+  .va-status-degraded {
+    background: rgba(244, 67, 54, 0.18);
+    color: #c62828;
+  }
+  
+  /* Мини‑метрики в карточке */
+  
+  .va-card-metrics {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 11px;
+  }
+  
+  .va-mini-metric {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  
+  .va-mini-metric strong {
+    font-size: 13px;
+  }
+  
+  .va-mini-muted {
+    opacity: 0.7;
+  }
+  
+  /* Кнопки */
+  
+  .va-card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  
+  .va-btn-ghost {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--mts-red);
+  }
+  
+  .va-btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--mts-red);
+    border: 1px solid rgba(227, 6, 19, 0.4);
+  }
+  
+  /* Панель деталей */
+  
+  .va-details {
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .va-details-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  
+  .va-details-id {
+    margin: 2px 0 10px;
+    font-size: 11px;
+    opacity: 0.7;
+  }
+  
+  .va-details-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    gap: 12px;
+  }
+  
+  .va-details-row span:first-child {
+    opacity: 0.7;
+  }
+  
+  .va-metrics {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .va-metric-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+  }
+  
+  .va-metric-bar {
+    margin-top: 4px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.6);
+    overflow: hidden;
+  }
+  
+  .va-metric-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #ff8a80, #e30613);
+  }
+  
+  .va-metric-ram {
+    background: linear-gradient(90deg, #b39ddb, #512da8);
+  }
+  
+  .va-details-btn {
+    margin-top: 8px;
+  }
+
+  /* Кастомные выпадашки */
+
+.va-dropdown {
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid rgba(227, 6, 19, 0.25);
+    padding: 8px 12px;
+    font-size: 13px;
+    background: rgba(255, 255, 255, 0.9);
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease,
+      background 0.2s ease, transform 0.1s ease;
+    color: var(--mts-red);
+  }
+  
+  .va-dropdown:hover {
+    background: #ffffff;
+  }
+  
+  .va-dropdown-open {
+    border-color: var(--mts-red);
+    box-shadow: 0 0 0 1px rgba(227, 6, 19, 0.25);
+    transform: translateY(-1px);
+  }
+  
+  .va-dropdown-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+  
+  .va-dropdown-icon {
+    font-size: 10px;
+    opacity: 0.7;
+  }
+  
+  /* Меню */
+  
+.va-dropdown-menu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 4px);
+    padding: 4px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(227, 6, 19, 0.18);
+    max-height: 220px;
+    overflow-y: auto;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    z-index: 50; /* поверх остальных элементов внутри панели */
+  }
+  
+  .va-dropdown-item {
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: transparent;
+    padding: 6px 10px;
+    border-radius: 10px;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--mts-red);
+  }
+  
+  .va-dropdown-item:hover {
+    background: rgba(227, 6, 19, 0.06);
+  }
+  
+  .va-dropdown-item-active {
+    background: rgba(227, 6, 19, 0.16);
+    color: var(--mts-red);
+    font-weight: 600;
+  }
+  
+  /* Адаптив */
+  
+  @media (max-width: 960px) {
+    .va-main {
+      grid-template-columns: 1fr;
+    }
+  
+    .va-details {
+      order: -1;
+    }
+  }
+  
+  @media (max-width: 720px) {
+    .va-filters {
+      flex-direction: column;
+    }
+  
+    .va-filters-right {
+      width: 100%;
+      justify-content: flex-start;
+    }
+  
+    .va-main {
+      gap: 12px;
+    }
+  }
